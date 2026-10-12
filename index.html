@@ -1,0 +1,134 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+
+<title>Quant Strategy 研究库</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+/* Layout: a reading-room index — fixed directory on the left, the selected report fills the right pane; stacks on phones. */
+:root{
+  --bg:#f6f7f5; --surface:#fdfdfc; --ink:#14171a; --ink-2:#4b5157; --muted:#7c8288;
+  --rule:#dfe2df; --accent:#1f5f8b; --accent-soft:#e3edf4;
+  --hk:#b4441a; --hk-soft:#fbe9df; --us:#1f5f8b; --us-soft:#e3edf4; --mix:#4a3aa7; --mix-soft:#ebe8f7;
+  --f-display:"Noto Sans SC","IBM Plex Sans",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans","Noto Sans SC",system-ui,-apple-system,"PingFang SC",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111416; --surface:#181c1f; --ink:#f1f3f2; --ink-2:#c0c6ca; --muted:#8a9196;
+  --rule:#2a3034; --accent:#7fb6e0; --accent-soft:#1b2c38;
+  --hk:#f08a5d; --hk-soft:#3a2219; --us:#7fb6e0; --us-soft:#1b2c38; --mix:#9085e9; --mix-soft:#25213d; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111416; --surface:#181c1f; --ink:#f1f3f2; --ink-2:#c0c6ca; --muted:#8a9196;
+  --rule:#2a3034; --accent:#7fb6e0; --accent-soft:#1b2c38;
+  --hk:#f08a5d; --hk-soft:#3a2219; --us:#7fb6e0; --us-soft:#1b2c38; --mix:#9085e9; --mix-soft:#25213d; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14.5px;line-height:1.6}
+.app{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);height:100%}
+nav{border-right:1px solid var(--rule);background:var(--surface);overflow-y:auto;padding-inline:18px;padding-block:22px 40px;min-width:0}
+.brand{display:block;text-decoration:none;color:inherit;margin-bottom:18px}
+.brand .ey{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.brand h1{font-family:var(--f-display);font-weight:700;font-size:21px;line-height:1.25;margin:4px 0 0;text-wrap:balance}
+.grp{margin-top:18px}
+.grp h2{display:flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.grp h2 i{width:8px;height:8px;border-radius:2px;display:inline-block}
+ol{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+nav a.item{display:grid;grid-template-columns:22px minmax(0,1fr);gap:4px;padding:6px 8px;border-radius:5px;text-decoration:none;color:var(--ink-2);font-size:13.5px;line-height:1.45}
+nav a.item .n{font-family:var(--f-mono);font-size:11px;color:var(--muted);padding-top:2px}
+nav a.item:hover{background:var(--bg);color:var(--ink)}
+nav a.item[aria-current="page"]{background:var(--accent-soft);color:var(--ink);font-weight:600}
+nav a.item:focus-visible,.card:focus-visible,.bar a:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+main{min-width:0;display:flex;flex-direction:column;height:100%;overflow:hidden}
+.bar{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px;padding-inline:18px;padding-block:10px;border-bottom:1px solid var(--rule);background:var(--surface)}
+.bar .t{font-family:var(--f-display);font-weight:700;font-size:15px}
+.bar .s{font-size:12.5px;color:var(--muted);flex:1 1 300px;min-width:0}
+.bar a{font-size:12.5px;color:var(--accent);text-decoration:none;white-space:nowrap}
+.bar a:hover{text-decoration:underline}
+iframe{flex:1;width:100%;border:0;background:var(--bg);display:block}
+.home{overflow-y:auto;flex:1;padding-inline:24px;padding-block:32px 64px}
+.home .in{max-width:980px;margin:0 auto}
+.home h2.big{font-family:var(--f-display);font-size:clamp(24px,3.4vw,32px);font-weight:700;line-height:1.25;margin:0 0 10px;text-wrap:balance}
+.home p.lede{color:var(--ink-2);max-width:68ch;margin:0 0 8px}
+.home .meta{font-family:var(--f-mono);font-size:12px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px 18px}
+.home section{margin-top:30px}
+.home section h3{display:flex;align-items:center;gap:8px;font-family:var(--f-display);font-size:17px;margin:0 0 4px}
+.home section h3 i{width:10px;height:10px;border-radius:2px}
+.home section p.note{font-size:13px;color:var(--muted);margin:0 0 10px;max-width:72ch}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr));gap:10px}
+.card{display:flex;flex-direction:column;gap:4px;padding:12px 14px;border:1px solid var(--rule);border-radius:6px;background:var(--surface);text-decoration:none;color:inherit;min-width:0}
+.card:hover{border-color:var(--accent)}
+.card .top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.card b{font-family:var(--f-display);font-weight:600;font-size:14.5px;line-height:1.4}
+.card .n{font-family:var(--f-mono);font-size:11px;color:var(--muted);white-space:nowrap}
+.card span.d{font-size:13px;color:var(--ink-2);line-height:1.55}
+.card .tag{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.c-hk{background:var(--hk)}.c-us{background:var(--us)}.c-mix{background:var(--mix)}
+@media (max-width:820px){
+  .app{display:block;height:auto}
+  html,body{height:auto}
+  nav{border-right:0;border-bottom:1px solid var(--rule);max-height:none}
+  body.reading nav .grp{display:none}
+  body.reading nav{padding-block:12px}
+  body.reading nav .brand{margin-bottom:0}
+  main{height:auto;overflow:visible}
+  iframe{height:calc(100vh - 140px);flex:none}
+  .home{overflow:visible}
+}
+</style>
+
+<div class="app">
+<nav aria-label="报告目录">
+  <a class="brand" href="#" data-id="">
+    <div class="ey">Quant strategy · 研究目录</div>
+    <h1>Quant Strategy 研究库</h1>
+  </a>
+  <div id="toc"></div>
+</nav>
+<main>
+  <div class="home" id="home">
+    <div class="in">
+      <h2 class="big">港股、美股业绩反应策略：全部研究</h2>
+      <p class="lede">2026 年 10 月 7–12 日完成的 18 份研究报告，按港股、美股、港美综合分组。港股按研究先后编号，后一份建立在前一份的结论上。点左侧目录或下面的卡片打开报告；每份报告顶部有“返回目录”。</p>
+      <div class="meta"><span>港股 7 份 · 美股 9 份 · 综合 2 份</span><span>数据截至 2026-09-30</span><span>回测仅供研究，不构成投资建议</span></div>
+      <div id="groups"></div>
+    </div>
+  </div>
+</main>
+</div>
+
+<script>
+(function(){
+const G=[
+ {id:'mix',name:'港美综合',note:'先看这里：两个市场各自推荐的策略、要避免的交易，以及同一规则下的港美对比。',items:[
+  ['strategy','港美股业绩策略','每个市场的前三名策略、和大盘与同池全买的对比、要坚决避免的交易，以及量化怎样套利美股的业绩漂移。','10-08'],
+  ['us-hk-compare','美股港股业绩漂移对比','同一套规则下重算港美两地：港股中小盘的业绩反应会延续，美股基本没有可交易的漂移。','10-08']]},
+ {id:'hk',name:'港股 · 业绩动量',note:'按研究先后排列，后一份建立在前一份的结论上。',items:[
+  ['hk-drift','港股业绩反应漂移研究','业绩公告后大涨的股票之后会继续涨，和美股相反；大跌后抄底不赚钱。','10-07'],
+  ['hk-t0','港股业绩 T+0 收盘入场回测','反应日收盘买入：持有约一周或 42–63 日最好；成本、小盘、非收市后公告会让结果变差。','10-08'],
+  ['hk-eps','港股业绩超预期加股价大涨','加 Wind EPS 同比过滤有用，涨幅 ≥10% 时最明显；股价涨但 EPS 降、股价跌但 EPS 升都亏钱。','10-08'],
+  ['hk-surprise','港股超预期 vs 同比 vs 纯股价','Yahoo 一致预期只覆盖少数港股；EPS 同比最实用，“有预期看超预期、否则看同比”最好但提升有限。','10-08'],
+  ['hk-regime','港股牛熊与市场宽度','趋势和宽度指标预测不了港股指数；港股/SPY 相对强弱能预测策略回报，用来决定开不开新仓。','10-08'],
+  ['hk-overlays','港股业绩动量：止盈止损与配置','止盈没用，ROIC 筛选不推荐；空闲资金放 SPY 和港美门控是最稳的两个改进。','10-08'],
+  ['hk-signals','港股业绩动量信号全表','门控为开时的全部历史信号逐笔列出，可按业绩期、时段、代码筛选。','10-09']]},
+ {id:'us',name:'美股',note:'美股业绩反应的系列回测，以及市场层面的复盘。',items:[
+  ['us-drift','美股业绩反应漂移研究','业绩日 1 日涨跌幅预测不了之后的平均走势；beat / miss 本身比股价反应更有用。','10-07'],
+  ['us-sp500','标普 500 业绩反应回测','只在标普 500 成分股里交易：8 种入场条件 × 5 种持有期，和 SPY 对比。','10-08'],
+  ['us-nonsp','非标普 500 业绩反应回测','同样规则用在标普 500 以外的流动股，和 VXF 等扩展市场 ETF 对比。','10-08'],
+  ['us-mcap','市值分层业绩反应回测','每季度按市值分档，分别回测业绩日涨跌后买入、持有 N 天的结果。','10-08'],
+  ['us-top1000','美国前 1000 大（除标普 500）回测','市值前 1000 名去掉标普 500 后约 500 家中盘公司，按季度更新股票池。','10-08'],
+  ['us-eps','EPS 超预期回测','Yahoo 一致预期的 beat / miss 叠加 1 日涨跌幅，标普成分股和非标普流动股分开算。','10-08'],
+  ['us-topdown','美股自上而下复盘','指数长期表现、标普历次回撤、“增长 × 利率”格局下的行业轮动，以及 AI 泡沫破裂的情景分析。','10-09'],
+  ['us-quarterly','美股季末回报榜','每个季末倒算 10 / 5 / 3 / 1 年回报，列出前十名。','10-09'],
+  ['lev-etf','杠杆 ETF 择时实验','QQQ/TQQQ、SOXX/SOXL 等 15 组杠杆 ETF：18 种技术指标、均线周期、QQQ vs SOXX 轮动、五资产叠加，以及剔除 2026 年的稳健性检验。','10-12']]}
+];
+const BY={};let n=0;
+G.forEach(g=>g.items.forEach((it,i)=>{BY[it[0]]={t:it[1],d:it[2],date:it[3],g:g.id,n:g.id==='hk'?String(i+1):''};}));
+const sw=id=>`<i class="c-${id}"></i>`;
+document.getElementById('toc').innerHTML=G.map(g=>`<div class="grp"><h2>${sw(g.id)}${g.name}</h2><ol>${g.items.map((it,i)=>`<li><a class="item" href="r/${it[0]}.html"><span class="n">${g.id==='hk'?i+1:'·'}</span><span>${it[1]}</span></a></li>`).join('')}</ol></div>`).join('');
+document.getElementById('groups').innerHTML=G.map(g=>`<section><h3>${sw(g.id)}${g.name}</h3><p class="note">${g.note}</p><div class="cards">${g.items.map((it,i)=>`<a class="card" href="r/${it[0]}.html"><span class="top"><b>${g.id==='hk'?(i+1)+'. ':''}${it[1]}</b><span class="n">${it[3]}</span></span><span class="d">${it[2]}</span></a>`).join('')}</div></section>`).join('');
+})();
+</script>
+
+
+</body></html>
